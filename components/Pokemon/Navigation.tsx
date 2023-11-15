@@ -2,37 +2,46 @@ import Link from "next/link";
 
 const Navigation = (props) => {
     const { next, prev } = props;
-    if (next && next !== "" && prev === "") {
-        const query = next.split("?")[0];
-        console.log(query);
+    const next_page = next?.split("?")[1];
+    const prev_page = prev?.split("?")[1];
+
+    if (next !== "" && prev === "") {
+        
         return (
-            <>
+            <>                
                 <li className="mx-1">
                     <Link
-                    href="#"
+                    href={`pokemon/?${next_page}`}
                     className="flex h-9 min-w-[36px] items-center justify-center rounded-md bg-body-color bg-opacity-[15%] px-4 text-sm text-body-color transition hover:bg-primary hover:bg-opacity-100 hover:text-white"
                     >
                     Next
                     </Link>
                 </li>    
+            </>
+        )
+    } else if (next === "" && prev !== "") {
+        return (
+            <>                
                 <li className="mx-1">
-                    <a
-                    href="#0"
+                    <Link
+                    href={`pokemon/?${prev_page}`}
                     className="flex h-9 min-w-[36px] items-center justify-center rounded-md bg-body-color bg-opacity-[15%] px-4 text-sm text-body-color transition hover:bg-primary hover:bg-opacity-100 hover:text-white"
                     >
                     Prev
-                    </a>
-                </li>
+                    </Link>
+                </li>    
             </>
         )
+    }
+    if (next === "" && prev === "") {
+        return <></>
     }
     
     return (
         <>
-        <h2>holaaaa</h2>
         <li className="mx-1">
             <a
-            href="#0"
+            href={`pokemon/?${prev_page}`}
             className="flex h-9 min-w-[36px] items-center justify-center rounded-md bg-body-color bg-opacity-[15%] px-4 text-sm text-body-color transition hover:bg-primary hover:bg-opacity-100 hover:text-white"
             >
             Prev
@@ -40,7 +49,7 @@ const Navigation = (props) => {
         </li>
         <li className="mx-1">
             <a
-            href="#0"
+            href={`pokemon/?${next_page}`}
             className="flex h-9 min-w-[36px] items-center justify-center rounded-md bg-body-color bg-opacity-[15%] px-4 text-sm text-body-color transition hover:bg-primary hover:bg-opacity-100 hover:text-white"
             >
             Next

@@ -1,16 +1,33 @@
+
+"use client"
 import SharePost from "@/components/Pokemon/SharePost";
 import TagButton from "@/components/Pokemon/TagButton";
 import Image from "next/image";
+import { useEffect, useState } from "react";
+import { useParams } from 'next/navigation'
+import { v4 as uuidv4 } from 'uuid';
 
-import { Metadata } from "next";
+const PokemonDetailsPage = () => {
 
-export const metadata: Metadata = {
-  title: "Blog Details Page | Free Next.js Template for Startup and SaaS",
-  description: "This is Blog Details Page for Startup Nextjs Template",
-  // other metadata
-};
+  const [pokeInfo, setPokeInfo] = useState([]);
+  const [nextPage, setNextPage] = useState();
+  const [previosPage, setPreviousPage] = useState()
 
-const BlogDetailsPage = () => {
+  const params = useParams()
+  console.log(params)
+
+  useEffect(() => {
+    const getData = async () => {
+      const query = await fetch(`api/pokemon/details/${params.id}`);
+      const response = await query.json();      
+      setPokeInfo(response);
+      setNextPage(response.next);
+      setPreviousPage(response.previous)      
+    }
+    getData();    
+  },[]);
+
+
   return (
     <>
       <section className="pb-[120px] pt-[150px]">
@@ -344,4 +361,4 @@ const BlogDetailsPage = () => {
   );
 };
 
-export default BlogDetailsPage;
+export default PokemonDetailsPage;
