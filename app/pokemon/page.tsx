@@ -5,6 +5,9 @@ import Search from "@/components/Pokemon/Search";
 import Navigation from "@/components/Pokemon/Navigation";
 import Breadcrumb from "@/components/Common/Breadcrumb";
 import { useSearchParams } from 'next/navigation';
+import Skeleton from 'react-loading-skeleton'
+import 'react-loading-skeleton/dist/skeleton.css'
+import { Suspense } from 'react';
 
 import { useEffect, useState } from "react";
 import { v4 as uuidv4 } from 'uuid';
@@ -29,6 +32,7 @@ const Pokemon = () => {
   } else if (limit && offset) {
     query_params = `?limit=${limit}&offset=${offset}`
   }  
+  let loading = true
   useEffect(() => {
     const getData = async () => {
       const query = await fetch(`api/pokemon/${query_params}`);
@@ -37,7 +41,8 @@ const Pokemon = () => {
       setNextPage(response.next);
       setPreviousPage(response.previous)      
     }
-    getData();    
+    getData();
+    loading = false
   },[]);
   
   return (
@@ -50,8 +55,25 @@ const Pokemon = () => {
         <div className="container">
           <Search placeholder="Buscar"/>
           <div className="-mx-4 flex flex-wrap justify-center">
-            {pokeInfo.results && 
-              
+          <Suspense fallback={<Skeleton count={5} />}>
+            {
+              pokeInfo.results &&
+              pokeInfo.results.map( (pokemon) => (   
+                <div
+                
+                  key={uuidv4()}
+                  className="w-full px-4 md:w-2/3 lg:w-1/2 xl:w-1/3 mt-1.5"
+                >     
+                  <SinglePokemon key={uuidv4()} pokemon={pokemon}  />                                  
+                </div>
+                ))
+            }
+          </Suspense>
+            {
+              loading && <Skeleton count={5} />
+            }
+            {  
+              pokeInfo.results &&
               pokeInfo.results.map( (pokemon) => (   
                 <div
                 

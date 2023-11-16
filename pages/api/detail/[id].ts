@@ -3,12 +3,10 @@ import { NextApiRequest, NextApiResponse } from 'next';
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   try {
-    console.log('detalle')
     const { query } = req;
-    const response = await axios.get(process.env.API_URL, {
-      params: query
-    })
-    const data = await response.data;
+    console.log(query.id)
+    const response = await axios.get(`${process.env.API_URL}${query.id}`)
+    const data = await response.data;    
     res.status(200).json(data);
   } catch (err) {
     res.status(500).json({
