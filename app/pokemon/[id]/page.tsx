@@ -12,7 +12,6 @@ const PokemonDetailsPage = () => {
   const [pokeInfo, setPokeInfo] = useState([]);
 
   const params = useParams()
-  let loading = true;
   useEffect(() => {
     const getData = async () => {
       const query = await fetch(`../api/detail/${params.id}`);      
@@ -20,15 +19,12 @@ const PokemonDetailsPage = () => {
       setPokeInfo(response);      
     }
     getData();    
-    loading = false;
   },[]);
   //console.log(pokeInfo)
-  
-  !loading && pokeInfo.moves && pokeInfo.moves.map( (move) => {
-    console.log('dsdsdsd')
-    console.log(move)
+  let movesList = []
+  pokeInfo.moves && pokeInfo.moves.map( (move) => {
+    movesList.push(move.move.name)
   })
-
   return (
     <>
       <section className="pb-[120px] pt-[150px]">
@@ -92,24 +88,21 @@ const PokemonDetailsPage = () => {
                   </p>
                   <ul className="mb-10 list-inside list-disc text-body-color">
                     <li className="mb-2 text-base font-medium text-body-color sm:text-lg lg:text-base xl:text-lg">
-                      Number of powers: { !loading && pokeInfo && pokeInfo.abilities.length || 0 }
+                      Number of powers: { pokeInfo.abilities && pokeInfo.abilities.length || 0 }
                     </li>
                     <li className="mb-2 text-base font-medium text-body-color sm:text-lg lg:text-base xl:text-lg">
-                      Forms: { !loading && pokeInfo.forms.length || 0 }
+                      Forms: { pokeInfo.forms &&  pokeInfo.forms.length || 0 }
                     </li>
                     <li className="mb-2 text-base font-medium text-body-color sm:text-lg lg:text-base xl:text-lg">
-                      Moves: { !loading && pokeInfo.moves.length || 0 }
+                      Moves: { pokeInfo.moves && pokeInfo.moves.length || 0 }
                     </li>
                     <li className="mb-2 text-base font-medium text-body-color sm:text-lg lg:text-base xl:text-lg">
-                      Stats: { !loading && pokeInfo.stats.length || 0 }
+                      Stats: { pokeInfo.stats && pokeInfo.stats.length || 0 }
                     </li>
                   </ul>
                   <div className="relative z-10 mb-10 overflow-hidden rounded-md bg-primary bg-opacity-10 p-8 md:p-9 lg:p-8 xl:p-9">
                     <p className="text-center text-base font-medium italic text-body-color">
-                      Moves: { !loading && pokeInfo.moves && pokeInfo.moves.map( (move) => {
-                        {move.move.name}
-                      })
-                      }
+                      <strong>Moves:</strong> { movesList && movesList.toString() }
 
                     </p>
                     <span className="absolute left-0 top-0 z-[-1]">
@@ -257,27 +250,7 @@ const PokemonDetailsPage = () => {
                     consectetur adipiscing elit in voluptate velit esse cillum
                     dolore eu fugiat nulla pariatur. Excepteur sint occaecat
                     mattis vulputate cupidatat.
-                  </p>
-                  <div className="items-center justify-between sm:flex">
-                    <div className="mb-5">
-                      <h4 className="mb-3 text-sm font-medium text-body-color">
-                        Popular Tags :
-                      </h4>
-                      <div className="flex items-center">
-                        <TagButton text="Design" />
-                        <TagButton text="Development" />
-                        <TagButton text="Info" />
-                      </div>
-                    </div>
-                    <div className="mb-5">
-                      <h5 className="mb-3 text-sm font-medium text-body-color sm:text-right">
-                        Share this post :
-                      </h5>
-                      <div className="flex items-center sm:justify-end">
-                        <SharePost />
-                      </div>
-                    </div>
-                  </div>
+                  </p>                  
                 </div>
               </div>
             </div>
